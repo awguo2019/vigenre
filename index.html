@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        
+        
+        <title>Really Cool Encryption !!!</title>
+        
+    
+        
+        <script type = "text/javascript" src = "https://code.jquery.com/jquery-latest.min.js"></script>
+        
+        
+    </head>
+    
+    <body>
+        <h1>VIGENRE</h1>
+     
+            Ciphertext:<br>
+            <input type="text" name="ctext"><br>
+            Key:<br>
+            <input type="text" name="key"><br>
+            <input type="radio" name="funct" value=0> Encrypt
+            <input type="radio" name="funct" value=1> Decrypt <br>
+            
+            
+      
+            <button type="button" onclick="calculate()">Submit</button>
+        <p>Answer: <span> </span></p>
+        
+    </body>
+    
+        <script>
+            
+            var ctext;    // the text that  is being inputted
+            var key;      // the key that is used to encrypt/decrypt
+            var funct;    // encrypt or decrypt
+            var ans;      // the answer that is outputted
+            var intctext; // converted integer output of ctext
+            var intkey;   // converted integer output of key
+        
+        function stoi(text){  // string to integer function, text is a character array
+            var intlist;  // integer list 
+            intlist = text; // setting integer list to have same amount of array values as the passed array
+             
+            for(var i = 0; i < text.length; i++){ // looping through each array value
+                intlist[i] = (text[i].charCodeAt(0) - 97); // changing the letter to ascii value to 0-25 into intlist array, subtract 97 to adjust ascii value
+            }
+            
+            return intlist; // returns integer list
+        }
+        
+        function itos(text){  // integer to string function, text is integer (ascii value) array
+            var charlist;  // character list
+            charlist = text; // setting character list to have same amount of array values as the passed array
+            
+            for(var i = 0; i < text.length; i++){ // looping through each array value 
+                charlist[i] = String.fromCharCode(text[i] + 97); // changing the ascii values to integers, add 97 to change it to correct ascii value
+            }
+            
+            return charlist; //returns the character list (string)
+        }       
+        
+        function encrypt(plaintext, key){ // encrypting  DONT LOOK HERE NOT USED IN CODE
+            var encryptstr;  // the encrypted string
+            encryptstr = plaintext;  // first setting it equal to plaintext
+            
+            for(var i = 0; i < plaintext.length; i++){  // looping through plaintext
+                var x = i % key.length;  // x is looping through the key
+                encryptstr[i] = (plaintext[i] + key[x]) % 26;  // changing the integer value of letter (0-25 goes with a-z)
+            }
+           
+            return encryptstr; // return it lul
+        }
+            
+        function betterencrypt(plaintext, key){ // better encoding!!!
+            var encryptstr;  // encrypted string
+            var intkey;  // converted key from characters to integers
+            intkey = stoi(key);  // convert the key to integers
+            encryptstr = stoi(plaintext);  // set encryptstr to the ascii values of plaintext
+             for(var i = 0; i < plaintext.length; i++){  // looping through plaintext
+                var x = i % key.length;  // x is looping through the key
+                encryptstr[i] = (plaintext[i] + key[x]) % 26;  // changing the integer value of letter (0-25 goes with a-z)
+            }
+            
+            encryptstr = itos(encryptstr);  // convert the numbers back to charactrs
+            return encryptstr;
+        }
+        
+        function decrypt(ciphertext, key){ //decrypting (code is basically the same as encrypting) DONT LOOK HERE NOT USED IN CODE
+            var decryptstr; //the decrypting string (duh)
+            decryptstr = ciphertext; // setting it equal with the ciphertext
+            for(var i = 0; i < ciphertext.length; i++){ // looping it with the cipher text
+                var x = i % key.length; // looping through key (again)
+                decryptstr[i] = ((ciphertext[i] - key[x])+26) % 26; // subtracting this time to 'undo' the key, returning old integer value of letter
+            }
+          
+            return decryptstr; // does something idk seems useful tho
+        }
+            
+        function betterdecrypt(ciphertext, key){ 
+            var decryptstr;
+            var intkey;
+            decryptstr = stoi(ciphertext);
+            intkey = stoi(key);
+            for(var i = 0; i < ciphertext.length; i++){ 
+                var x = i % key.length; 
+                decryptstr[i] = ((ciphertext[i] - key[x])+26) % 26; //
+            }
+          decryptstr = itos(decryptstr);
+            return decryptstr; 
+        }
+        
+        function calculate(){ // this is what the button does
+            
+           ctext = $('input:text[name=ctext]').val().replace(/\s/g, '').toLowerCase().split(''); // uses JQuery to do some magic
+           key = $('input:text[name=key]').val().replace(/\s/g, '').toLowerCase().split(''); // uses JQuery to do some magic
+           funct = parseInt($('input[name="funct"]:checked').val()); // uses JQuery to do some magic
+               
+           switch(funct){ // I use a switch here because I'm cool and I copy pasted the base code from calculator which had more than 2 options (switch is basically easier if else if else statement)
+               case 0: // encrypting case
+                   //intctext = stoi(ctext);  // converting text from characters to integers
+                   //intkey = stoi(key);  // converting the key into numbers
+                   //ans = encrypt(intctext, intkey);  // encrypting the number values
+                   //ans = itos(ans);  // changing the encrypted numbers back into text
+                   ans = betterencrypt(ctext, key);
+                   break; // break the statement
+               case 1: // decrypting case
+                   //intctext = stoi(ctext); // read above
+                   //intkey = stoi(key); // read above
+                   //ans = decrypt(intctext, intkey); // decrypting the number values
+                   ans = betterdecrypt(ctext, key);
+                   break; // I should be sleeping right now wtf
+           }
+           
+        $("span").html(ans); // change the span section into the ans text, thereby 'outputting' the data
+         
+       }
+            
+    
+            
+        </script>
+  
+</html>
